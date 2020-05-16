@@ -1,5 +1,7 @@
 //index.js
+import CONFIG from '../../config.js'
 const app = getApp()
+const db = wx.cloud.database()
 
 Page({
   data: {
@@ -7,7 +9,8 @@ Page({
     userInfo: {},
     logged: false,
     takeSession: false,
-    requestResult: ''
+    requestResult: '',
+    goods: []
   },
 
   onLoad: function() {
@@ -33,6 +36,35 @@ Page({
           })
         }
       }
+    })
+
+    this.fetchGoods()
+  },
+
+  async fetchGoods() {
+    const res = await db.collection(CONFIG.collectionName)
+      // .where({
+      // _openid: 'gh_a911ec9e8e19' // 填入当前用户 openid
+      // })
+      .field({
+        cost: false,
+        goodsDetails: false,
+      })
+      .get()
+    this.setData({
+      goods: res.data,
+    })
+  },
+
+  goSearch: function() {
+    // console.log("confirm")
+      this.fetchGoods()
+  },
+
+  toDetailsTap: function(e) {
+    console.log(e)
+    wx.navigateTo({
+      url: "/pages/goods-details/goodsDetails?id=" + e.currentTarget.dataset.id
     })
   },
 
