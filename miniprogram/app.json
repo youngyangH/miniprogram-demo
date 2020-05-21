@@ -7,8 +7,6 @@
     "pages/userConsole/userConsole",
     "pages/storageConsole/storageConsole",
     "pages/databaseGuide/databaseGuide",
-    "pages/addFunction/addFunction",
-    "pages/deployFunctions/deployFunctions",
     "pages/chooseLib/chooseLib",
     "pages/openapi/openapi",
     "pages/openapi/serverapi/serverapi",
@@ -17,6 +15,7 @@
     "pages/im/im",
     "pages/im/room/room"
   ],
+
   "window": {
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
@@ -24,6 +23,7 @@
     "navigationBarTitleText": "云开发 QuickStart",
     "navigationBarTextStyle": "black"
   },
+
   "tabBar": {
     "color": "#6e6d6b",
     "selectedColor": "#e64340",
@@ -44,6 +44,7 @@
       }
     ]
   },
+
   "usingComponents": {
     "van-notice-bar": "@vant/weapp/notice-bar/index",
     "van-search": "@vant/weapp/search/index",
@@ -52,6 +53,7 @@
     "van-count-down": "@vant/weapp/count-down/index",
     "van-button": "@vant/weapp/button/index"
   },
+
   "sitemapLocation": "sitemap.json",
   "style": "v2"
 }

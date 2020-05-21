@@ -1,6 +1,6 @@
 // 云函数模板
 // 部署：在 cloud-functions/login 文件夹右击选择 “上传并部署”
-
+//TODO Implement the details
 const cloud = require('wx-server-sdk')
 
 // 初始化 cloud
@@ -15,15 +15,22 @@ cloud.init({
  * event 参数包含小程序端调用传入的 data
  * 
  */
-exports.main = (event, context) => {
+exports.main = async (event, context) => {
   console.log(event)
   console.log(context)
-  console.log(cloud.getWXContext)
+  console.log(cloud.getWXContext())
+
+  // const db = cloud.database()
+  // db.collection('demo').get().then((data) => console.log(data))
 
   const res = await cloud.cloudPay.unifiedOrder({
-    
+    "body" : "demo",
+    "outTradeNo" : "1217752501201407033233368018",
+    "spbillCreateIp" : "127.0.0.1",
+    "totalFee" : 0.01,
+    "functionName": "pay_cb"
   })
 
-  return           
+  return res          
 }
 
