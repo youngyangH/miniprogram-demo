@@ -28,6 +28,11 @@ function showTabBarBadge(){
   // })
 }
 
+function checkStatus(res) {
+  return res.errMsg.split(":").pop() === 'ok';
+}
+
 module.exports = {
-  showTabBarBadge: showTabBarBadge
+  showTabBarBadge: showTabBarBadge,
+  checkStatus: checkStatus
 }

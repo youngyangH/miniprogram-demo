@@ -161,7 +161,7 @@ Page({
 
       if (e && "buyNow" != that.data.orderType) {
         // 清空购物车数据
-        WXAPI.shippingCarInfoRemoveAll(loginToken)
+        // WXAPI.shippingCarInfoRemoveAll(loginToken)
       }
       if (!e) {
         that.setData({
