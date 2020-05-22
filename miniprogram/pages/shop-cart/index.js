@@ -1,5 +1,6 @@
+import ShopCart from '../../utils/shopCart'
 const TOOLS = require('../../utils/tools.js')
-const AUTH = require('../../utils/auth')
+// const AUTH = require('../../utils/auth')
 
 const app = getApp()
 
@@ -42,25 +43,25 @@ Page({
   },
 
   onShow: function() {
-    AUTH.checkHasLogined().then(isLogined => {
-      this.setData({
-        wxlogin: isLogined
-      })
-      if (isLogined) {
-        this.shippingCarInfo()
+    //FIXME using the right auth and login api
+    const that = this
+    wx.login({
+      success (isLogined) {
+        that.shippingCarInfo()
       }
-    })    
+    })
+
   },
 
   async shippingCarInfo(){
-    const token = wx.getStorageSync('token')
-    if (!token) {
-      return
-    }
-    // const res = await WXAPI.shippingCarInfo(token)
-    if (res.code == 0) {
+    // const token = wx.getStorageSync('token')
+    // if (!token) {
+    //   return
+    // }
+    const res = {"items": ShopCart.getShopCart()}
+    if (res.items.length > 0) {
       this.setData({
-        shippingCarInfo: res.data
+        shippingCarInfo: res
       })
     } else {
       this.setData({
@@ -128,7 +129,8 @@ Page({
   async delItemDone(key){
     const token = wx.getStorageSync('token')
     // const res = await WXAPI.shippingCarInfoRemoveItem(token, key)
-    if (res.code != 0 && res.code != 700) {
+   const res = ShopCart.deleteItemByKey(key)
+    if (!res) {
       wx.showToast({
         title: res.msg,
         icon:'none'

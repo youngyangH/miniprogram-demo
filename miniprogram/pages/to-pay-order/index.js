@@ -1,5 +1,5 @@
 import Tools from '../../utils/tools'
-import CONFIG from '../../config.js'
+import CONFIG from '../../config'
 const db = wx.cloud.database()
 
 Page({
@@ -175,7 +175,7 @@ Page({
           allGoodsAndYunPrice: res.data.amountLogistics + res.data.amountTotle,
           yunPrice: res.data.amountLogistics
         });
-        that.getMyCoupons();
+        // that.getMyCoupons();
         return;
       }
       that.processAfterCreateOrder(res)
@@ -185,24 +185,15 @@ Page({
   async processAfterCreateOrder(res) {
     // 直接弹出支付，取消支付的话，去订单列表
     // const res1 = await WXAPI.userAmount(wx.getStorageSync('token'))
-    if (res1.code != 0) {
-      wx.showToast({
-        title: '无法获取用户资金信息',
-        icon: 'none'
-      })
-      wx.redirectTo({
-        url: "/pages/order-list/index"
-      });
-      return
-    }
-    const money = res.data.amountReal * 1 - res1.data.balance*1
-    if (money <= 0) {
-      wx.redirectTo({
-        url: "/pages/order-list/index"
-      })
-    } else {
-      wxpay.wxpay('order', money, res.data.id, "/pages/order-list/index");
-    }
+    wx.cloud.callFunction({
+      name: 'pay',
+      data: {
+        a: 12,
+        b: 19
+      }
+    }).then(function(data) {
+      console.log(data)
+    })
   },
 
   async initShippingAddress() {

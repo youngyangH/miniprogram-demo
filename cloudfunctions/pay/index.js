@@ -23,13 +23,13 @@ exports.main = async (event, context) => {
   // const db = cloud.database()
   // db.collection('demo').get().then((data) => console.log(data))
 
-  const res = await cloud.cloudPay.unifiedOrder({
-    "body" : "demo",
-    "outTradeNo" : "1217752501201407033233368018",
-    "spbillCreateIp" : "127.0.0.1",
-    "totalFee" : 0.01,
-    "functionName": "pay_cb"
-  })
+  // const res = await cloud.cloudPay.unifiedOrder({
+  //   "body" : "demo",
+  //   "outTradeNo" : "1217752501201407033233368018",
+  //   "spbillCreateIp" : "127.0.0.1",
+  //   "totalFee" : 0.01,
+  //   "functionName": "pay_cb"
+  // })
 
   return res          
 }

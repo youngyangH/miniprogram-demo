@@ -1,6 +1,7 @@
-import CONFIG from '../../config.js'
+import CONFIG from '../../config'
 import Poster from 'wxa-plugin-canvas/poster/poster'
-import Tools from '../../utils/tools.js'
+import Tools from '../../utils/tools'
+import ShopCart from '../../utils/shopCart'
 const app = getApp();
 const AUTH = require('../../utils/auth')
 const SelectSizePrefix = "选择："
@@ -355,25 +356,31 @@ Page({
     //   })
     //   return
     // }
-    // const token = wx.getStorageSync('token')
-    // const goodsId = this.data.goodsDetail.basicInfo.id
-    // const sku = []
-    // if (this.data.goodsDetail.properties) {
-    //   this.data.goodsDetail.properties.forEach(p => {
-    //     sku.push({
-    //       optionId: p.id,
-    //       optionValueId: p.optionValueId
-    //     })
-    //   })
-    // }
-    // // const res = await WXAPI.shippingCarInfoAddItem(token, goodsId, this.data.buyNumber, sku)
-    // if (res.code != 0) {
-    //   wx.showToast({
-    //     title: res.msg,
-    //     icon: 'none'
-    //   })
-    //   return
-    // }
+    const token = wx.getStorageSync('token')
+    const goodsId = this.data.goodsDetail.basicInfo.id
+    const sku = []
+    if (this.data.goodsDetail.properties) {
+      this.data.goodsDetail.properties.forEach(p => {
+        sku.push({
+          optionId: p.id,
+          optionValueId: p.optionValueId
+        })
+      })
+    }
+    const res = ShopCart.addShopCart({
+      "sku": sku,
+      "number": this.data.buyNumber,
+      "price": this.data.selectSizePrice,
+      "key": "key",
+      "name": "name",
+    })
+    if (!res) {
+      wx.showToast({
+        title: res.msg,
+        icon: 'none'
+      })
+      return
+    }
 
     this.closePopupTap();
     wx.showToast({
