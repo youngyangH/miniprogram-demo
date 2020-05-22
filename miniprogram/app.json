@@ -4,14 +4,6 @@
     "pages/goods-details/goodsDetails",
     "pages/shop-cart/index",
 
-    "pages/userConsole/userConsole",
-    "pages/storageConsole/storageConsole",
-    "pages/databaseGuide/databaseGuide",
-    "pages/chooseLib/chooseLib",
-    "pages/openapi/openapi",
-    "pages/openapi/serverapi/serverapi",
-    "pages/openapi/callback/callback",
-    "pages/openapi/cloudid/cloudid",
     "pages/im/im",
     "pages/im/room/room"
   ],

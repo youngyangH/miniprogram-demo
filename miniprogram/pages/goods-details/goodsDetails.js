@@ -1,9 +1,11 @@
 import CONFIG from '../../config.js'
+import Poster from 'wxa-plugin-canvas/poster/poster'
+import Tools from '../../utils/tools.js'
 const app = getApp();
 const AUTH = require('../../utils/auth')
 const SelectSizePrefix = "选择："
 const db = wx.cloud.database()
-import Poster from 'wxa-plugin-canvas/poster/poster'
+
 
 Page({
   data: {
@@ -73,7 +75,7 @@ Page({
       })
       .get()
 
-    if (checkStatus(goodsDetailRes)) {
+    if (Tools.checkStatus(goodsDetailRes)) {
       var selectSizeTemp = SelectSizePrefix;
       if (goodsDetailRes.data.properties) {
         for (var i = 0; i < goodsDetailRes.data.properties.length; i++) {
@@ -706,8 +708,3 @@ Page({
     })
   },
 })
-
-function checkStatus(goodsDetailRes) {
-  return goodsDetailRes.errMsg.split(":").pop() === 'ok';
-}
-

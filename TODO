@@ -4,3 +4,4 @@
 3. User login and fetch the user data
 4. store address in db
 5. provide the delivery information
+6. wx.authorize

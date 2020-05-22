@@ -1,5 +1,6 @@
+import TOOLS from '../../utils/tools'
+import CONFIG from '../../config.js'
 const db = wx.cloud.database()
-const TOOLS = require('../../utils/tools')
 
 Page({
   data: {
@@ -38,6 +39,7 @@ Page({
       return
     }    
     const postData = {
+      userId: wx.getStorage(CONFIG.token),
       linkMan: linkMan,
       address: address,
       mobile: mobile,
@@ -66,8 +68,20 @@ Page({
       wx.navigateBack()
     }
   },
+
   async onLoad(e) {
-    
+    if(e.id) {
+      db.collection(CONFIG.addressCollection)
+      .where({
+        _id: e.id
+      })
+      .get().then( res => {
+        this.setData({
+          id: e.id,
+          addressData: res.data[0]
+        })
+      })
+    }
   },
 
   deleteAddress: function (e) {
@@ -77,9 +91,11 @@ Page({
       content: '确定要删除该收货地址吗？',
       success: function (res) {
         if (res.confirm) {
-          WXAPI.deleteAddress(wx.getStorageSync('token'), id).then(function () {
-            wx.navigateBack({})
-          })
+          db.collection(CONFIG.addressCollection)
+            .doc(id)
+            .remove().then(
+              wx.navigateBack({}) 
+            )
         } else {
           console.log('用户点击取消')
         }

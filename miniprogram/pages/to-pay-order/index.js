@@ -1,7 +1,6 @@
-// const app = getApp()
-// const WXAPI = require('apifm-wxapi')
-// const AUTH = require('../../utils/auth')
-// const wxpay = require('../../utils/pay.js')
+import Tools from '../../utils/tools'
+import CONFIG from '../../config.js'
+const db = wx.cloud.database()
 
 Page({
   data: {
@@ -20,9 +19,11 @@ Page({
   },
 
   onShow(){
+    //FIXME using the right auth and login api
     const that = this
     wx.login({
       success (isLogined) {
+        console.log(isLogined)
         that.setData({
           wxlogin: isLogined
         })
@@ -149,15 +150,18 @@ Page({
       postData.calculate = "true";
     }
 
-    WXAPI.orderCreate(postData).then(function (res) {
-      if (res.code != 0) {
-        wx.showModal({
-          title: '错误',
-          content: res.msg,
-          showCancel: false
-        })
-        return;
-      }
+    db.collection(CONFIG.order).add({
+      data: postData
+    })
+      .then(function (res) {
+    //   if (res.code != 0) {
+    //     wx.showModal({
+    //       title: '错误',
+    //       content: res.msg,
+    //       showCancel: false
+    //     })
+    //     return;
+    //   }
 
       if (e && "buyNow" != that.data.orderType) {
         // 清空购物车数据
@@ -202,16 +206,24 @@ Page({
   },
 
   async initShippingAddress() {
-    // const res = await WXAPI.defaultAddress(wx.getStorageSync('token'))
-    // if (res.code == 0) {
-    //   this.setData({
-    //     curAddressData: res.data.info
-    //   });
-    // } else {
-    //   this.setData({
-    //     curAddressData: null
-    //   });
-    // }
+    
+    const res = await db.collection(CONFIG.addressCollection)
+      .where({
+        //FIXME
+        userId: wx.getStorage(CONFIG.token)
+      })
+      //FIXME handle the multiple address case
+      .limit(1)
+      .get()
+    if (Tools.checkStatus(res)) {
+      this.setData({
+        curAddressData: res.data[0]
+      });
+    } else {
+      this.setData({
+        curAddressData: null
+      });
+    }
     // this.processYunfei();
   },
 
