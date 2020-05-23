@@ -21,7 +21,7 @@ Page({
   },
 
   onShow(){
-    //FIXME using the right auth and login api
+    //FIXME need to login?
     const that = this
     wx.login({
       success (isLogined) {
@@ -152,18 +152,11 @@ Page({
       postData.calculate = "true";
     }
 
-    db.collection(CONFIG.order).add({
-      data: postData
-    })
+    db.collection(CONFIG.order)
+      .add({
+        data: postData
+      })
       .then(function (res) {
-    //   if (res.code != 0) {
-    //     wx.showModal({
-    //       title: '错误',
-    //       content: res.msg,
-    //       showCancel: false
-    //     })
-    //     return;
-    //   }
 
       if (e && "buyNow" != that.data.orderType) {
         // 清空购物车数据
@@ -202,11 +195,9 @@ Page({
     
     const res = await db.collection(CONFIG.addressCollection)
       .where({
-        //FIXME
-        // userId: wx.getStorage(CONFIG.token)
+        "userId": wx.getStorageSync(CONFIG.token),
+        "isDefault": true,
       })
-      //FIXME handle the multiple address case
-      .limit(1)
       .get()
     if (Tools.checkStatus(res)) {
       this.setData({
@@ -268,7 +259,8 @@ Page({
 
   addAddress: function () {
     wx.navigateTo({
-      url: "/pages/address-add/index"
+      //Add default address
+      url: "/pages/address-add/index?idDefault=true"
     })
   },
 

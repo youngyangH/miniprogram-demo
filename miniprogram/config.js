@@ -2,7 +2,7 @@ module.exports = {
     collectionName: "demo",
     sku: "GoodsSku",
     addressCollection: "addresses",
-    token: "openID",
+    token: "token",
     order: "orders",
     shopCart: "shopCart",
     version: "8.4.0",

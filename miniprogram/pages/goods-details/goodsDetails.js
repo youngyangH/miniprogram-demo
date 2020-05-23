@@ -17,7 +17,6 @@ Page({
     selectSize: SelectSizePrefix,
     selectSizePrice: 0,
     selectSizeOPrice: 0,
-    // totalScoreToPay: 0,
     hideShopPopup: true,
     buyNumber: 0,
     buyNumMin: 1,

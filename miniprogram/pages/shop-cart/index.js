@@ -43,7 +43,7 @@ Page({
   },
 
   onShow: function() {
-    //FIXME using the right auth and login api
+    //FIXME need to login?
     const that = this
     wx.login({
       success (isLogined) {

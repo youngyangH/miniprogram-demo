@@ -10,6 +10,10 @@ Page({
     logged: false,
     takeSession: false,
     requestResult: '',
+    //TODO implement later
+    categories: null,
+    goodsRecommend: null,
+    banners: null,
     goods: []
   },
 
@@ -21,20 +25,21 @@ Page({
       return
     }
 
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            success: res => {
-              this.setData({
-                avatarUrl: res.userInfo.avatarUrl,
-                userInfo: res.userInfo
-              })
-            }
+    wx.checkSession({
+      success () {
+        //session_key 未过期，并且在本生命周期一直有效
+        console.log("session_key is ok!")
+      },
+      fail () {
+        // session_key 已经失效，需要重新执行登录流程
+        wx.cloud.callFunction({
+          name: 'login',
+        }).then((res) => {
+          wx.setStorageSync({
+            key: CONFIG.token,
+            data: res.openid
           })
-        }
+        }) //重新登录
       }
     })
 

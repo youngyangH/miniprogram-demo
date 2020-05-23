@@ -8,6 +8,10 @@
     "pages/im/room/room"
   ],
 
+  "permission": {
+   
+  },
+
   "window": {
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",

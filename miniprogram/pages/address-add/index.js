@@ -10,6 +10,7 @@ Page({
     cIndex: 0,//选择的市下标
     areas: undefined,// 区县数数组
     aIndex: 0,//选择的区下标
+    isDefault: false,
   },
 
   async bindSave(e) {
@@ -24,6 +25,7 @@ Page({
       })
       return
     }
+
     if (mobile == ""){
       wx.showToast({
         title: '请填写手机号码',
@@ -31,20 +33,22 @@ Page({
       })
       return
     }
+
     if (address == ""){
       wx.showToast({
         title: '请填写详细地址',
         icon: 'none'
       })
       return
-    }    
+    }
+
     const postData = {
-      userId: wx.getStorage(CONFIG.token),
+      userId: wx.getStorageSync(CONFIG.token),
       linkMan: linkMan,
       address: address,
       mobile: mobile,
       post_code: code,
-      isDefault: 'true'
+      isDefault: this.data.isDefault
     }
     let apiResult
     if (this.data.id) {
@@ -82,6 +86,9 @@ Page({
         })
       })
     }
+    this.setData({
+      isDefault: (e.isDefault == "true")
+    })
   },
 
   deleteAddress: function (e) {

@@ -10,9 +10,11 @@
 		"minified": true,
 		"newFeature": true,
 		"coverView": true,
+		"nodeModules": true,
 		"autoAudits": false,
 		"showShadowRootInWxmlPanel": true,
 		"scopeDataCheck": false,
+		"uglifyFileName": false,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
 		"uploadWithSourceMap": true,
@@ -20,12 +22,11 @@
 			"ignore": [],
 			"disablePlugins": [],
 			"outputPath": ""
-		},
-		"nodeModules": true
+		}
 	},
 	"appid": "wx41c3e3e3e2b3379f",
 	"projectname": "miniprogram-1",
-	"libVersion": "2.8.1",
+	"libVersion": "2.11.0",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
