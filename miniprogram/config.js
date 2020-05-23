@@ -1,5 +1,6 @@
 module.exports = {
     collectionName: "demo",
+    sku: "GoodsSku",
     addressCollection: "addresses",
     token: "openID",
     order: "orders",

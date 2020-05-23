@@ -69,7 +69,7 @@ Page({
     db.collection(CONFIG.addressCollection)
       .where({
         //FIXME
-        userId: '1'
+        // userId: '1'
       })
       //FIXME handle the multiple address case
       .get().then( res => {

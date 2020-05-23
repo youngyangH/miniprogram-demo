@@ -55,14 +55,14 @@ Page({
   },
 
   onShow (){
-    AUTH.checkHasLogined().then(isLogined => {
-      if (isLogined) {
-        this.setData({
-          wxlogin: isLogined
-        })
-        this.goodsFavCheck()
-      }
-    })
+    // AUTH.checkHasLogined().then(isLogined => {
+    //   if (isLogined) {
+    //     this.setData({
+    //       wxlogin: isLogined
+    //     })
+    //     this.goodsFavCheck()
+    //   }
+    // })
     this.getGoodsDetails(this.data.goodsId)
   },
 
@@ -96,7 +96,7 @@ Page({
       }
       let _data = {
         goodsDetail: goodsDetailRes.data,
-        selectSizePrice: goodsDetailRes.dataminPrice,
+        selectSizePrice: goodsDetailRes.data.minPrice,
         selectSizeOPrice: goodsDetailRes.data.originalPrice,
         // totalScoreToPay: goodsDetailRes.data.minScore,
         buyNumMax: goodsDetailRes.data.stores,
@@ -106,18 +106,19 @@ Page({
     }
   },
 
+  // Fetch comments
   reputation: function(goodsId) {
-    var that = this;
-    db.collection(CONFIG.collectionName)
-      .doc(goodsId)
-      .field({
-        reputation: true,
-      })
-      .get().then(function(res) {
-        that.setData({
-          reputation: res.data,
-        })
-      })
+    // var that = this;
+    // db.collection(CONFIG.collectionName)
+    //   .doc(goodsId)
+    //   .field({
+    //     reputation: true,
+    //   })
+    //   .get().then(function(res) {
+    //     that.setData({
+    //       reputation: res.data,
+    //     })
+    //   })
     
   },
 
@@ -280,15 +281,16 @@ Page({
     child.active = true
     // 获取所有的选中规格尺寸数据
     const needSelectNum = this.data.goodsDetail.properties.length
-    let curSelectNum = 0;
-    let propertyChildIds = "";
-    let propertyChildNames = "";
+    let curSelectNum = 0
+    let propertyChildIds = ""
+    let propertyChildNames = ""
 
     this.data.goodsDetail.properties.forEach(p => {
       p.childsCurGoods.forEach(c => {
         if (c.active) {
           curSelectNum++;
-          propertyChildIds = propertyChildIds + p.id + ":" + c.id + ",";
+          //FIXME Refine Fetch sku condition
+          propertyChildIds = propertyChildIds + p.id + ":" + c.id + ","
           propertyChildNames = propertyChildNames + p.name + ":" + c.name + "  ";
         }
       })
@@ -299,18 +301,23 @@ Page({
     }
     // 计算当前价格
     if (canSubmit) {
-      //FIXME try cloud function
-      // const res = await WXAPI.goodsPrice(this.data.goodsDetail.basicInfo.id, propertyChildIds)
-      // const res = {}
-      let _price = 0.1
+      //TODO try cloud function
+      const res = await db.collection(CONFIG.sku)
+        .where({
+          "goodsId": this.data.goodsDetail._id,
+          "propertyChildIds": propertyChildIds,
+        })
+        .limit(1)
+        .get()
+      let _price = res.data[0].skuPrice
       this.setData({
         selectSizePrice: _price,
         selectSizeOPrice: _price,  // origin price
         // totalScoreToPay: res.data.score,
         propertyChildIds: propertyChildIds,
         propertyChildNames: propertyChildNames,
-        buyNumMax: 10,
-        buyNumber: 1
+        buyNumMax: res.data[0].stores,
+        buyNumber: (res.data[0].stores > 0) ? 1 : 0,
       });
     }
     let skuGoodsPic = this.data.skuGoodsPic
@@ -435,25 +442,7 @@ Page({
           url: "/pages/to-pay-order/index?orderType=buyNow&pingtuanOpenId=" + this.data.pingtuanopenid
         })
       } else {
-        // WXAPI.pingtuanOpen(wx.getStorageSync('token'), that.data.goodsDetail.basicInfo.id).then(function(res) {
-        //   if (res.code == 2000) {
-        //     that.setData({
-        //       wxlogin: false
-        //     })
-        //     return
-        //   }
-        //   if (res.code != 0) {
-        //     wx.showToast({
-        //       title: res.msg,
-        //       icon: 'none',
-        //       duration: 2000
-        //     })
-        //     return
-        //   }
-        //   wx.navigateTo({
-        //     url: "/pages/to-pay-order/index?orderType=buyNow&pingtuanOpenId=" + res.data.id
-        //   })
-        // })
+       //PT
       }
     } else {
       wx.navigateTo({

@@ -1,5 +1,7 @@
 import Tools from '../../utils/tools'
 import CONFIG from '../../config'
+import ShopCart from '../../utils/shopCart'
+
 const db = wx.cloud.database()
 
 Page({
@@ -165,12 +167,12 @@ Page({
 
       if (e && "buyNow" != that.data.orderType) {
         // 清空购物车数据
-        // WXAPI.shippingCarInfoRemoveAll(loginToken)
+        ShopCart.clearShopCart()
       }
       if (!e) {
         that.setData({
-          totalScoreToPay: res.data.score,
-          isNeedLogistics: res.data.isNeedLogistics,
+          // totalScoreToPay: res.data.score,
+          // isNeedLogistics: res.data.isNeedLogistics,
           allGoodsPrice: res.data.amountTotle,
           allGoodsAndYunPrice: res.data.amountLogistics + res.data.amountTotle,
           yunPrice: res.data.amountLogistics
@@ -201,7 +203,7 @@ Page({
     const res = await db.collection(CONFIG.addressCollection)
       .where({
         //FIXME
-        userId: wx.getStorage(CONFIG.token)
+        // userId: wx.getStorage(CONFIG.token)
       })
       //FIXME handle the multiple address case
       .limit(1)
@@ -215,7 +217,7 @@ Page({
         curAddressData: null
       });
     }
-    // this.processYunfei();
+    this.processYunfei();
   },
 
   processYunfei() {    
@@ -240,27 +242,27 @@ Page({
       }
       allGoodsPrice += carShopBean.price * carShopBean.number;
 
-      var goodsJsonStrTmp = '';
-      if (i > 0) {
-        goodsJsonStrTmp = ",";
-      }
-      if (carShopBean.sku && carShopBean.sku.length > 0) {
-        let propertyChildIds = ''
-        carShopBean.sku.forEach(option => {
-          propertyChildIds = propertyChildIds + ',' + option.optionId + ':' + option.optionValueId
-        })
-        carShopBean.propertyChildIds = propertyChildIds
-      }
-      goodsJsonStrTmp += '{"goodsId":' + carShopBean.goodsId + ',"number":' + carShopBean.number + ',"propertyChildIds":"' + carShopBean.propertyChildIds + '","logisticsType":0, "inviter_id":' + inviter_id + '}';
-      goodsJsonStr += goodsJsonStrTmp;
+      // var goodsJsonStrTmp = '';
+      // if (i > 0) {
+      //   goodsJsonStrTmp = ",";
+      // }
+      // if (carShopBean.sku && carShopBean.sku.length > 0) {
+      //   let propertyChildIds = ''
+      //   carShopBean.sku.forEach(option => {
+      //     propertyChildIds = propertyChildIds + ',' + option.optionId + ':' + option.optionValueId
+      //   })
+      //   carShopBean.propertyChildIds = propertyChildIds
+      // }
+      // goodsJsonStrTmp += '{"goodsId":' + carShopBean.goodsId + ',"number":' + carShopBean.number + ',"propertyChildIds":"' + carShopBean.propertyChildIds + '","logisticsType":0, "inviter_id":' + inviter_id + '}';
+      // goodsJsonStr += goodsJsonStrTmp;
     }
 
-    goodsJsonStr += "]";
+    // goodsJsonStr += "]";
 
-    this.setData({
-      isNeedLogistics: isNeedLogistics,
-      goodsJsonStr: goodsJsonStr
-    });
+    // this.setData({
+    //   isNeedLogistics: isNeedLogistics,
+    //   goodsJsonStr: goodsJsonStr
+    // });
     this.createOrder();
   },
 
