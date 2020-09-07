@@ -55,7 +55,6 @@ Page({
     }
     this.setData({
       goodsList: shopList,
-      peisongType: this.data.peisongType
     });
     this.initShippingAddress()
   },
@@ -196,7 +195,7 @@ Page({
     const res = await db.collection(CONFIG.addressCollection)
       .where({
         "userId": wx.getStorageSync(CONFIG.token),
-        "isDefault": true,
+        "is_default": true,
       })
       .get()
     if (Tools.checkStatus(res)) {
@@ -208,7 +207,7 @@ Page({
         curAddressData: null
       });
     }
-    this.processYunfei();
+    // this.processYunfei();
   },
 
   processYunfei() {    
@@ -266,7 +265,7 @@ Page({
 
   selectAddress: function () {
     wx.navigateTo({
-      url: "/pages/select-address/index"
+      url: "/pages/select-address/index?defaultAddressId="+curAddressData._id
     })
   },
 

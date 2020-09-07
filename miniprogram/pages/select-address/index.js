@@ -5,18 +5,26 @@ const db = wx.cloud.database()
 
 Page({
   data: {
-    addressList: []
+    addressList: [],
+    defaultAddressId: "",
   },
 
   selectTap: function(e) {
-    // var id = e.currentTarget.dataset.id;
-    // WXAPI.updateAddress({
-    //   token: wx.getStorageSync('token'),
-    //   id: id,
-    //   isDefault: 'true'
-    // }).then(function(res) {
+    const $ = db.command
+    if(!e.currentTarget.dataset.isdefault) {
+      db.collection(CONFIG.addressCollection)
+        .where({
+          _id: $.in([this.data.defaultAddressId, e.currentTarget.dataset.id])
+        })
+        .update({
+          is_default: true
+        })
+        .then(() =>
+          wx.navigateBack({})
+       )
+    } else {
       wx.navigateBack({})
-    // })
+    }
   },
 
   addAddess: function() {
@@ -31,7 +39,10 @@ Page({
     })
   },
 
-  onLoad: function() {
+  onLoad: function(e) {
+    this.setData({
+      defaultAddressId: e.defaultAddressId,
+    })
   },
 
   onShow: function() {
